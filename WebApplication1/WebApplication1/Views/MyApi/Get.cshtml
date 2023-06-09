@@ -4,22 +4,29 @@
     ViewData["Title"] = "Get";
 }
 
+
 <h1>Get</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<label for="sort">排序：</label>
+<select id="sort">
+    <option value="name">依名稱</option>
+    <option value="time">依修改時間</option>
+    <option value="path">依路徑</option>
+</select>
+
+<button id="btnSubmit">提交</button>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.lastWriteTime)
+                @Html.DisplayNameFor(model => model.LastWriteTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.path)
+                @Html.DisplayNameFor(model => model.Path)
             </th>
             <th></th>
         </tr>
@@ -29,15 +36,55 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.lastWriteTime)
+                    @Html.DisplayFor(modelItem => item.LastWriteTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.path)
+                    @Html.DisplayFor(modelItem => item.Path)
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            var sortValue = $("#sort").val();
+
+            var viewData = {
+                sortOption: sortValue
+            };
+
+            $.ajax({
+                url: '/MyApi/GetOrderBySelection',
+                type: 'POST',
+                data: viewData,
+                success: function (response) {
+                    console.log(response);
+                    var tableBody = $(".table tbody");
+                    tableBody.empty();
+                    response.forEach(function (item) {
+                        var row = $("<tr></tr>");
+                        var nameCell = $("<td></td>").text(item.name);
+                        var lastWriteTimeCell = $("<td></td>").text(item.lastWriteTime);
+                        var pathCell = $("<td></td>").text(item.path);
+
+                        row.append(nameCell);
+                        row.append(lastWriteTimeCell);
+                        row.append(pathCell);
+
+                        tableBody.append(row);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

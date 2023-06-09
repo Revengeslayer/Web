@@ -22,5 +22,12 @@ namespace WebApplication1.Controllers
             var fileDetails= Libs.Library.GetFileDatas(filePaths);
             return fileDetails;
         }
+        [HttpPost]
+        public List<MyApiViewModel> GetOrderBySelection(string sortOption)
+        {
+            var model = GetInitInformation();
+            var sortedList = Libs.Library.GetSortDatas(model, sortOption);
+            return sortedList;
+        }
     }
 }

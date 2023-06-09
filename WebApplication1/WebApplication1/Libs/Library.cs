@@ -13,9 +13,9 @@ namespace WebApplication1.Libs
             {
                 Datas data = new Datas();
                 FileInfo fileInformation = new FileInfo(filepath);
-                data.name = fileInformation.Name;
-                data.lastWriteTime = fileInformation.LastWriteTimeUtc;
-                data.path = filepath;
+                data.Name = fileInformation.Name;
+                data.LastWriteTime = fileInformation.LastWriteTimeUtc;
+                data.Path = filepath;
                 dbDataLists.Add(data);
             }
             //ViewData load
@@ -23,9 +23,9 @@ namespace WebApplication1.Libs
             foreach (var dbData in dbDataLists)
             {
                 MyApiViewModel viewData = new MyApiViewModel();
-                viewData.name = dbData.name;
-                viewData.lastWriteTime = dbData.lastWriteTime;
-                viewData.path = dbData.path;
+                viewData.Name = dbData.Name;
+                viewData.LastWriteTime = dbData.LastWriteTime;
+                viewData.Path = dbData.Path;
                 viewDataLists.Add(viewData);
             }
 
@@ -37,6 +37,23 @@ namespace WebApplication1.Libs
             string currentPath = Directory.GetCurrentDirectory();
             string folderPath = Path.Combine(currentPath, filename);
             return folderPath;
+        }
+
+        public static List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
+        {
+            if (sortOption =="name")
+            {
+                model =model.OrderByDescending(model => model.Name).ToList();
+            }
+            if (sortOption =="time")
+            {
+                model = model.OrderByDescending(model => model.LastWriteTime).ToList();
+            }
+            if (sortOption =="path")
+            { 
+                model = model.OrderByDescending(model => model.Path).ToList(); 
+            }
+            return model;
         }
     }
 }

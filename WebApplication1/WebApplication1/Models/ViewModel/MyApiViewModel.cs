@@ -2,8 +2,8 @@
 {
     public class MyApiViewModel
     {
-        public string? name { get; set; }
-        public DateTime? lastWriteTime { get; set; }
-        public string? path { set; get; }
+        public string? Name { get; set; }
+        public DateTime? LastWriteTime { get; set; }
+        public string? Path { set; get; }
     }
 }
