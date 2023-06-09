@@ -10,22 +10,26 @@ namespace WebApplication1.Libs
             //Database Datas load
             var dbDataLists = new List<Datas>();    
             foreach (var filepath in filepaths)
-            {
-                Datas data = new Datas();
+            {           
                 FileInfo fileInformation = new FileInfo(filepath);
-                data.Name = fileInformation.Name;
-                data.LastWriteTime = fileInformation.LastWriteTimeUtc;
-                data.Path = filepath;
+                Datas data = new Datas
+                {
+                    Name = fileInformation.Name,
+                    LastWriteTime = fileInformation.LastWriteTimeUtc,
+                    Path = filepath
+                };
                 dbDataLists.Add(data);
             }
             //ViewData load
             var viewDataLists = new List<MyApiViewModel>();
             foreach (var dbData in dbDataLists)
             {
-                MyApiViewModel viewData = new MyApiViewModel();
-                viewData.Name = dbData.Name;
-                viewData.LastWriteTime = dbData.LastWriteTime;
-                viewData.Path = dbData.Path;
+                MyApiViewModel viewData = new()
+                {
+                    Name = dbData.Name,
+                    LastWriteTime = dbData.LastWriteTime,
+                    Path = dbData.Path
+                };
                 viewDataLists.Add(viewData);
             }
 
@@ -41,18 +45,19 @@ namespace WebApplication1.Libs
 
         public static List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
         {
-            if (sortOption =="name")
-            {
+
+            if (sortOption =="name1")
+                model = model.OrderBy(model => model.Name).ToList();
+            if (sortOption =="name2")
                 model =model.OrderByDescending(model => model.Name).ToList();
-            }
-            if (sortOption =="time")
-            {
+            if (sortOption == "time1")
+                model = model.OrderBy(model => model.LastWriteTime).ToList();
+            if (sortOption =="time2")
                 model = model.OrderByDescending(model => model.LastWriteTime).ToList();
-            }
-            if (sortOption =="path")
-            { 
+            if (sortOption == "path1")
+                model = model.OrderBy(model => model.Path).ToList();
+            if (sortOption =="path2")
                 model = model.OrderByDescending(model => model.Path).ToList(); 
-            }
             return model;
         }
     }
