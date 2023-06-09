@@ -1,45 +1,43 @@
-﻿@{
-    ViewData["Title"] = "我的API網頁(GET)";
+﻿@model IEnumerable<WebApplication1.Models.ViewModel.MyApiViewModel>
+
+@{
+    ViewData["Title"] = "Get";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body> 
-    <div id="resultContainer"></div>
+<h1>Get</h1>
 
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '@Url.Action("GetInitInformation", "MyApi")',
-                type: 'GET',
-                success: function (response) {
-                    console.log(response);
-                    displayData(response);
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
-        });
-
-        function displayData(data) {
-            var resultContainer = $("#resultContainer");
-            for (var i = 0; i < data.length; i++) {
-                var fileData = data[i];
-                var nameElement = $("<div>").text("Name: " + fileData.name);
-                var lastWriteTimeElement = $("<div>").text("Last Write Time: " + fileData.lastWriteTime);
-                var filePath = $("<div>").text("File Path: " + fileData.path);
-
-                resultContainer.append(nameElement);
-                resultContainer.append(lastWriteTimeElement);
-                resultContainer.append(filePath);
-                resultContainer.append("<p>")
-            }
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastWriteTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.path)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastWriteTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.path)
+                </td>
+            </tr>
         }
-    </script>
-</body>
-</html>
+    </tbody>
+</table>

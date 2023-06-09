@@ -2,16 +2,10 @@
 using System.Text.Json;
 using System.IO;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
-    public class FileViewModel
-    {
-        public string? FileName { get; set; }
-        public DateTime? LastWriteTime { get; set; }
-        public string? Path { get; set; }
-    }
-
     public class MyApiController : Controller
     {
         [HttpGet]
@@ -21,12 +15,12 @@ namespace WebApplication1.Controllers
             return View(model); 
         }
         [HttpGet]
-        public JsonResult GetInitInformation()
+        public List<MyApiViewModel> GetInitInformation()
         {
             var directoryPath = Libs.Library.FolderPath("Files");
             string[] filePaths = Directory.GetFiles(directoryPath);
             var fileDetails= Libs.Library.GetFileDatas(filePaths);
-            return new JsonResult(fileDetails);
+            return fileDetails;
         }
     }
 }
