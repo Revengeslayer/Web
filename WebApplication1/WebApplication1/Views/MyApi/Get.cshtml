@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "我的API網頁(GET)";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body> 
+    <div id="resultContainer"></div>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetInitInformation", "MyApi")',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    displayData(response);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        function displayData(data) {
+            var resultContainer = $("#resultContainer");
+            for (var i = 0; i < data.length; i++) {
+                var fileData = data[i];
+                var nameElement = $("<div>").text("Name: " + fileData.name);
+                var lastWriteTimeElement = $("<div>").text("Last Write Time: " + fileData.lastWriteTime);
+                var filePath = $("<div>").text("File Path: " + fileData.path);
+
+                resultContainer.append(nameElement);
+                resultContainer.append(lastWriteTimeElement);
+                resultContainer.append(filePath);
+                resultContainer.append("<p>")
+            }
+        }
+    </script>
+</body>
+</html>
