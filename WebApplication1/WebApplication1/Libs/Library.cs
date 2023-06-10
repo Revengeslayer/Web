@@ -1,4 +1,5 @@
-﻿using WebApplication1.Models;
+﻿using System.Xml.Linq;
+using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Libs
@@ -8,32 +9,43 @@ namespace WebApplication1.Libs
         public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
         {
             //Database Datas load
-            var dbDataLists = new List<Datas>();    
-            foreach (var filepath in filepaths)
-            {           
-                FileInfo fileInformation = new FileInfo(filepath);
-                Datas data = new Datas
-                {
-                    Name = fileInformation.Name,
-                    LastWriteTime = fileInformation.LastWriteTimeUtc,
-                    Path = filepath
-                };
-                dbDataLists.Add(data);
-            }
+            List<Datas> dbDataLists = GetDBDataLists(filepaths);
             //ViewData load
-            var viewDataLists = new List<MyApiViewModel>();
-            foreach (var dbData in dbDataLists)
-            {
-                MyApiViewModel viewData = new()
-                {
-                    Name = dbData.Name,
-                    LastWriteTime = dbData.LastWriteTime,
-                    Path = dbData.Path
-                };
-                viewDataLists.Add(viewData);
-            }
+            List<MyApiViewModel> viewDataLists = GetViewDataLists(dbDataLists);
 
             return viewDataLists;
+        }
+
+        private static List<MyApiViewModel> GetViewDataLists(List<Datas> dbDataLists)
+        {
+            var viesDataLists = dbDataLists.Select(
+               dbData => new MyApiViewModel
+               {
+                   Name = dbData.Name,
+                   LastWriteTime = dbData.LastWriteTime,
+                   Path = dbData.Path,
+                   Size = dbData.Size
+               }).ToList();
+
+            return viesDataLists;
+        }
+
+        private static List<Datas> GetDBDataLists(string[] filepaths)
+        {
+            var dataLists = filepaths.Select(
+                filepath =>
+                {
+                    FileInfo fileInformation = new FileInfo(filepath);
+                    return new Datas
+                    {
+                        Name = fileInformation.Name,
+                        LastWriteTime = fileInformation.LastWriteTime,
+                        Path = filepath,
+                        Size =fileInformation.Length
+                    };
+                }).ToList();
+
+            return dataLists;
         }
 
         public static string FolderPath(string filename)
@@ -46,18 +58,23 @@ namespace WebApplication1.Libs
         public static List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
         {
 
-            if (sortOption =="name1")
+            if (sortOption == "name1")
                 model = model.OrderBy(model => model.Name).ToList();
-            if (sortOption =="name2")
-                model =model.OrderByDescending(model => model.Name).ToList();
+            if (sortOption == "name2")
+                model = model.OrderByDescending(model => model.Name).ToList();
             if (sortOption == "time1")
                 model = model.OrderBy(model => model.LastWriteTime).ToList();
-            if (sortOption =="time2")
+            if (sortOption == "time2")
                 model = model.OrderByDescending(model => model.LastWriteTime).ToList();
             if (sortOption == "path1")
                 model = model.OrderBy(model => model.Path).ToList();
-            if (sortOption =="path2")
-                model = model.OrderByDescending(model => model.Path).ToList(); 
+            if (sortOption == "path2")
+                model = model.OrderByDescending(model => model.Path).ToList();
+            if (sortOption == "size1")
+                model = model.OrderBy(model => model.Size).ToList();
+            if (sortOption == "size2")
+                model = model.OrderByDescending(model => model.Size).ToList();
+
             return model;
         }
     }

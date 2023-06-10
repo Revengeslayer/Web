@@ -15,6 +15,8 @@
     <option value="time2">依修改時間(降序)</option>
     <option value="path1">依路徑(升序)</option>
     <option value="path2">依路徑(降序)</option>
+    <option value="size1">依檔案大小(升序)</option>
+    <option value="size2">依檔案大小(降序)</option>
 </select>
 
 <button id="btnSubmit">提交</button>
@@ -30,6 +32,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Path)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size)
             </th>
             <th></th>
         </tr>
@@ -47,11 +52,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Path)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
             </tr>
         }
     </tbody>
 </table>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
     $(document).ready(function () {
         $("#btnSubmit").click(function (e) {
@@ -73,15 +82,38 @@
                     tableBody.empty();
                     response.forEach(function (item) {
                         var row = $("<tr></tr>");
-                        var nameCell = $("<td></td>").text(item.name);
-                        var lastWriteTimeCell = $("<td></td>").text(item.lastWriteTime);
+                        var nameCell = $("<td></td>").text(item.name);                                           
+                        var lastWriteTimeCell = $("<td></td>").text(ShowTime(item.lastWriteTime));
                         var pathCell = $("<td></td>").text(item.path);
+                        var sizeCell = $("<td></td>").text(item.size);
 
                         row.append(nameCell);
                         row.append(lastWriteTimeCell);
                         row.append(pathCell);
+                        row.append(sizeCell);
 
                         tableBody.append(row);
+
+                        function ShowTime(time){
+                            var recordDateTime = new Date(time);
+
+                            var year = recordDateTime.getFullYear();
+                            var month = recordDateTime.getMonth() + 1;
+                            var day = recordDateTime.getDate();
+                            var hours = recordDateTime.getHours();
+                            var minutes = recordDateTime.getMinutes();
+                            var seconds = recordDateTime.getSeconds();
+
+                            var amOrPm = hours >= 12 ? '下午' : '上午';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12;
+                            hours = hours.toString().padStart(2, '0');
+                            minutes = minutes.toString().padStart(2, '0');
+                            seconds = seconds.toString().padStart(2, '0');
+
+                            var formattedDateTime = year + '/' + month + '/' + day + ' ' + amOrPm + ' ' + hours + ':' + minutes + ':' + seconds;
+                            return formattedDateTime;
+                        }
                     });
                 },
                 error: function (xhr, status, error) {
