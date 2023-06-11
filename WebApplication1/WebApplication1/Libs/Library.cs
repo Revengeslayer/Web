@@ -4,45 +4,81 @@ using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Libs
 {
+    public interface IDataConverter<TInput, TOutput>
+    {
+        TOutput Convert(TInput input);
+    }
+    public class MyApiViewModelConverter : IDataConverter<Datas, MyApiViewModel>
+    {
+        public MyApiViewModel Convert(Datas dbData)
+        {
+            var viewModelData = new MyApiViewModel
+            {
+                Name = dbData.Name,
+                LastWriteTime = dbData.LastWriteTime,
+                Path = dbData.Path,
+                Size = dbData.Size
+            };
+
+            return viewModelData;
+        }
+    }
+    public interface IFileInformationProvider
+    {
+        FileInfo GetFileInformation(string filePath);
+    }
+    public class FileInformationProvider : IFileInformationProvider, IDataConverter<FileInfo, Datas>
+    {
+        private string? filePath;
+        public Datas Convert(FileInfo infileInformationput)
+        {
+            var fileDatas = new Datas
+            {
+                Name = infileInformationput.Name,
+                LastWriteTime = infileInformationput.LastWriteTime,
+                Path = this.filePath,
+                Size = infileInformationput.Length
+            };
+
+            return fileDatas;
+        }
+
+        public FileInfo GetFileInformation(string filePath)
+        {
+            this.filePath = filePath;
+
+            return new FileInfo(filePath);
+        }
+    }
     public class Library
     {
         public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
         {
             //Database Datas load
-            List<Datas> dbDataLists = GetDBDataLists(filepaths);
+            var fileInformationProvider = new FileInformationProvider();
+            var dbDataLists = GetDBDataLists(filepaths, fileInformationProvider);
             //ViewData load
-            List<MyApiViewModel> viewDataLists = GetViewDataLists(dbDataLists);
+            var dataConverter = new MyApiViewModelConverter();
+            var viewDataLists = GetViewDataLists(dbDataLists, dataConverter);
 
             return viewDataLists;
         }
 
-        private static List<MyApiViewModel> GetViewDataLists(List<Datas> dbDataLists)
+        private static List<MyApiViewModel> GetViewDataLists(List<Datas> dbDataLists, IDataConverter<Datas, MyApiViewModel> dataConverter)
         {
-            var viesDataLists = dbDataLists.Select(
-               dbData => new MyApiViewModel
-               {
-                   Name = dbData.Name,
-                   LastWriteTime = dbData.LastWriteTime,
-                   Path = dbData.Path,
-                   Size = dbData.Size
-               }).ToList();
+            var viesDataLists = dbDataLists.Select(dbData => dataConverter.Convert(dbData)).ToList();
 
             return viesDataLists;
         }
 
-        private static List<Datas> GetDBDataLists(string[] filepaths)
+        private static List<Datas> GetDBDataLists(string[] filepaths, FileInformationProvider fileInformationProvider)
         {
             var dataLists = filepaths.Select(
                 filepath =>
                 {
-                    FileInfo fileInformation = new FileInfo(filepath);
-                    return new Datas
-                    {
-                        Name = fileInformation.Name,
-                        LastWriteTime = fileInformation.LastWriteTime,
-                        Path = filepath,
-                        Size =fileInformation.Length
-                    };
+                    FileInfo fileInformation = fileInformationProvider.GetFileInformation(filepath);
+
+                    return fileInformationProvider.Convert(fileInformation);
                 }).ToList();
 
             return dataLists;
