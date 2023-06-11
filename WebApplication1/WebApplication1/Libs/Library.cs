@@ -90,28 +90,5 @@ namespace WebApplication1.Libs
             string folderPath = Path.Combine(currentPath, filename);
             return folderPath;
         }
-
-        public static List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
-        {
-
-            if (sortOption == "name1")
-                model = model.OrderBy(model => model.Name).ToList();
-            if (sortOption == "name2")
-                model = model.OrderByDescending(model => model.Name).ToList();
-            if (sortOption == "time1")
-                model = model.OrderBy(model => model.LastWriteTime).ToList();
-            if (sortOption == "time2")
-                model = model.OrderByDescending(model => model.LastWriteTime).ToList();
-            if (sortOption == "path1")
-                model = model.OrderBy(model => model.Path).ToList();
-            if (sortOption == "path2")
-                model = model.OrderByDescending(model => model.Path).ToList();
-            if (sortOption == "size1")
-                model = model.OrderBy(model => model.Size).ToList();
-            if (sortOption == "size2")
-                model = model.OrderByDescending(model => model.Size).ToList();
-
-            return model;
-        }
     }
 }

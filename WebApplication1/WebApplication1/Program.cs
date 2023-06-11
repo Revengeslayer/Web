@@ -1,7 +1,16 @@
+using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
+using WebApplication1.Service;
+using WebApplication1.Service.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataConvertService>();
+builder.Services.AddTransient<IFileProvideService, FileProvideService>();
+builder.Services.AddTransient<ILibraryService, LibraryService>();
 
 var app = builder.Build();
 
