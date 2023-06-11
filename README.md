@@ -8,8 +8,8 @@ POST用到了AJAX 和 jQuery來實踐 我的功能(使用一個dropdownlist 來�
 [HttpGet]  
 public IActionResult Get()  
 {  
-var model = GetInitInformation();  
-return View(model);   
+  var model = GetInitInformation();  
+  return View(model);   
 }  
 </pre>
 此段中我從"GetInitInformation"獲取資料夾內的訊息並轉為"List<MyApiViewModel>"的資料型態，其中"MyApiViewModel"是我創立給前端使用的Model類別好讓前段和和端的Model獨立。
@@ -17,10 +17,10 @@ return View(model);
 [HttpGet]
 public List<MyApiViewModel> GetInitInformation()
 {
-var directoryPath = Libs.Library.FolderPath("Files");
-string[] filePaths = Directory.GetFiles(directoryPath);
-var fileDetails= Libs.Library.GetFileDatas(filePaths);
-return fileDetails;
+  var directoryPath = Libs.Library.FolderPath("Files");
+  string[] filePaths = Directory.GetFiles(directoryPath);
+  var fileDetails= Libs.Library.GetFileDatas(filePaths);
+  return fileDetails;
 }
 </pre>
 此段是獲取資料夾的資料。
@@ -28,8 +28,8 @@ return fileDetails;
 [HttpPost]
 public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
 {
-var sortedList = Libs.Library.GetSortDatas(viewModelData, sortOption);
-return sortedList;
+  var sortedList = Libs.Library.GetSortDatas(viewModelData, sortOption);
+  return sortedList;
 }
 此段是我獲取前端的"sortOption" 和 "viewModelData"再傳入後端內做排序。
 
