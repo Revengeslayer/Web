@@ -24,13 +24,14 @@ public List<MyApiViewModel> GetInitInformation()
 }
 </pre>
 此段是獲取資料夾的資料。
-
+<pre>
 [HttpPost]
 public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
 {
   var sortedList = Libs.Library.GetSortDatas(viewModelData, sortOption);
   return sortedList;
 }
+</pre>
 此段是我獲取前端的"sortOption" 和 "viewModelData"再傳入後端內做排序。
 
 其中的"Libs"是我存放我自己的函式庫的地方
