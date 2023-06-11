@@ -13,11 +13,24 @@ POST用到了AJAX 和 jQuery來實踐 我的功能(使用一個dropdownlist 來�
  }
 此段中我從"GetInitInformation"獲取資料夾內的訊息並轉為"List<MyApiViewModel>"的資料型態，其中"MyApiViewModel"是我創立給前端使用的Model類別好讓前段和和端的Model獨立。
  
- [HttpPost]
- public List<MyApiViewModel> GetOrderBySelection(string sortOption)
+ [HttpGet]
+ public List<MyApiViewModel> GetInitInformation()
  {
-     var model = GetInitInformation();
-     var sortedList = Libs.Library.GetSortDatas(model, sortOption);
+     var directoryPath = Libs.Library.FolderPath("Files");
+     string[] filePaths = Directory.GetFiles(directoryPath);
+     var fileDetails= Libs.Library.GetFileDatas(filePaths);
+     return fileDetails;
+ }
+ 此段是獲取資料夾的資料。
+ 
+ [HttpPost]
+ public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
+ {
+     var sortedList = Libs.Library.GetSortDatas(viewModelData, sortOption);
      return sortedList;
  }
- 此段是我獲取前端的"sortOption"再跟資料內的
+ 此段是我獲取前端的"sortOption" 和 "viewModelData"再傳入後端內做排序。
+
+ 其中的"Libs"是我存放我自己的函式庫的地方
+
+ 
