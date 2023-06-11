@@ -6,7 +6,7 @@ GET做初始值得讀取
 POST用到了AJAX 和 jQuery來實踐 我的功能(使用一個dropdownlist 來使得丟出一個POST到後段給 GetOrderBySelection)，回傳List<MyApiViewModel>給前端最後做顯示邏輯。
  
  [HttpGet]
- public IActionResult Get()
+ public IActionResult Get()  
  {
      var model = GetInitInformation();
      return View(model); 
@@ -14,7 +14,7 @@ POST用到了AJAX 和 jQuery來實踐 我的功能(使用一個dropdownlist 來�
 此段中我從"GetInitInformation"獲取資料夾內的訊息並轉為"List<MyApiViewModel>"的資料型態，其中"MyApiViewModel"是我創立給前端使用的Model類別好讓前段和和端的Model獨立。
  
  [HttpGet]
- public List<MyApiViewModel> GetInitInformation()/n
+ public List<MyApiViewModel> GetInitInformation()
  {
      var directoryPath = Libs.Library.FolderPath("Files");
      string[] filePaths = Directory.GetFiles(directoryPath);
