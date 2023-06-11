@@ -67,11 +67,13 @@
             e.preventDefault();
 
             var sortValue = $("#sort").val();
+            var myApiViewModel = @Html.Raw(Json.Serialize(Model));
 
             var viewData = {
-                sortOption: sortValue
+                sortOption: sortValue,
+                viewModelData: myApiViewModel
             };
-
+            debugger;
             $.ajax({
                 url: '/MyApi/GetOrderBySelection',
                 type: 'POST',

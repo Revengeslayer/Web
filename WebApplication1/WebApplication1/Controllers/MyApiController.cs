@@ -23,10 +23,9 @@ namespace WebApplication1.Controllers
             return fileDetails;
         }
         [HttpPost]
-        public List<MyApiViewModel> GetOrderBySelection(string sortOption)
+        public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
         {
-            var model = GetInitInformation();
-            var sortedList = Libs.Library.GetSortDatas(model, sortOption);
+            var sortedList = Libs.Library.GetSortDatas(viewModelData, sortOption);
             return sortedList;
         }
     }
