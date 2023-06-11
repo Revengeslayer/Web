@@ -49,3 +49,24 @@ public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
 }
 </pre>
 此段我使用了"依賴反轉"讓程式不會有太多的依賴。
+
+以下為新增功能
+<pre>
+builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataConvertService>();
+builder.Services.AddTransient<IFileProvideService, FileProvideService>();
+builder.Services.AddTransient<ILibraryService, LibraryService>();
+</pre>
+我在Program中新增3個service 並在 LibraryService 中使用"注入" 來獲取這些服務
+<pre>
+public class LibraryService : ILibraryService
+{
+    private readonly IFileProvideService fileProvideService;
+    private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
+    public LibraryService(IFileProvideService fileProvideService,IDataConvertService<Datas,MyApiViewModel> dataConvertService) 
+    {
+        this.fileProvideService = fileProvideService;
+        this.dataConvertService = dataConvertService;
+    }
+    //...
+}
+</pre
