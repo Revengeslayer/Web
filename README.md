@@ -35,5 +35,17 @@ public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelDa
 此段是我獲取前端的"sortOption" 和 "viewModelData"再傳入後端內做排序。
 
 其中的"Libs"是我存放我自己的函式庫的地方
+<pre>
+public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
+{
+    //Database Datas load
+    var fileInformationProvider = new FileInformationProvider();
+    var dbDataLists = GetDBDataLists(filepaths, fileInformationProvider);
+    //ViewData load
+    var dataConverter = new MyApiViewModelConverter();
+    var viewDataLists = GetViewDataLists(dbDataLists, dataConverter);
 
-
+    return viewDataLists;
+}
+</pre>
+此段我使用了"依賴反轉"讓程式不會有太多的依賴。
