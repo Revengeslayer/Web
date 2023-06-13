@@ -9,7 +9,7 @@ namespace WebApplication1.Service
     {
         private readonly IFileProvideService fileProvideService;
         private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
-        public LibraryService(IFileProvideService fileProvideService,IDataConvertService<Datas,MyApiViewModel> dataConvertService) 
+        public LibraryService(IFileProvideService fileProvideService, IDataConvertService<Datas, MyApiViewModel> dataConvertService)
         {
             this.fileProvideService = fileProvideService;
             this.dataConvertService = dataConvertService;
@@ -68,6 +68,11 @@ namespace WebApplication1.Service
                 model = model.OrderByDescending(model => model.Size).ToList();
 
             return model;
+        }
+
+        public bool CheckTableIsNULL(DatasDbContext _dbContext)
+        {
+            return _dbContext.Datas.Count() == 0;
         }
     }
 }

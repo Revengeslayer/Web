@@ -2,9 +2,12 @@ using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
 using WebApplication1.Service;
 using WebApplication1.Service.Interface;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<DatasDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("MyLocalDBSql")));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
