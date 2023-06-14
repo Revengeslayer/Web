@@ -51,7 +51,6 @@ public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
 此段我使用了"依賴反轉"讓程式不會有太多的依賴。
 
 以下為新增功能1
----
 <pre>
 builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataConvertService>();
 builder.Services.AddTransient<IFileProvideService, FileProvideService>();
