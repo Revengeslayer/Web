@@ -9,10 +9,13 @@ namespace WebApplication1.Service
     {
         private readonly IFileProvideService fileProvideService;
         private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
-        public LibraryService(IFileProvideService fileProvideService, IDataConvertService<Datas, MyApiViewModel> dataConvertService)
+        private readonly IDatabaseAccessService databaseAccessService;
+
+        public LibraryService(IFileProvideService fileProvideService, IDataConvertService<Datas, MyApiViewModel> dataConvertService,IDatabaseAccessService databaseAccessService)
         {
             this.fileProvideService = fileProvideService;
             this.dataConvertService = dataConvertService;
+            this.databaseAccessService = databaseAccessService;
         }
         public string FolderPath(string filename)
         {
@@ -20,28 +23,40 @@ namespace WebApplication1.Service
             string folderPath = Path.Combine(currentPath, filename);
             return folderPath;
         }
-        public List<Datas> GetFileDatas(string[] filepaths)
+        public List<Datas> GetFileDbDatas(string[] filepaths)
         {
             //Database Datas load
-            var dataLists = filepaths.Select(
+            if (databaseAccessService.CheckTableIsNull())
+            {
+                Console.WriteLine("空的");
+                var dataLists = filepaths.Select(
                 filepath =>
                 {
                     FileInfo fileInformation = fileProvideService.GetFileInfo(filepath);
 
-                    return fileProvideService.Convert(fileInformation);
+                    return fileProvideService.GetFileDatas(fileInformation);
                 }).ToList();
 
-            return dataLists;
+                databaseAccessService.CreateTableDatas(dataLists);
+
+                return dataLists;
+            }
+            else
+            {
+                Console.WriteLine("有的");
+                var dataLists = databaseAccessService.LoadTableDatas();
+
+                return dataLists;
+            }        
         }
         public List<MyApiViewModel> GetViewDatas(List<Datas> dbDataLists)
         {
-            var viesDataLists = dbDataLists.Select(dbData => dataConvertService.Convert(dbData)).ToList();
+            var viesDataLists = dbDataLists.Select(dbData => dataConvertService.GetFileDatas(dbData)).ToList();
 
             return viesDataLists;
         }
         public List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
         {
-
             if (sortOption == "name1")
                 model = model.OrderBy(model => model.Name).ToList();
             if (sortOption == "name2")
@@ -61,7 +76,6 @@ namespace WebApplication1.Service
 
             return model;
         }
-
         public string[] GetFilePaths(string filename)
         {
             var directoryPath = FolderPath(filename);

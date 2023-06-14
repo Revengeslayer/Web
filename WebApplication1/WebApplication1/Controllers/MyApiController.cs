@@ -11,32 +11,19 @@ namespace WebApplication1.Controllers
     public class MyApiController : Controller
     {
         private readonly ILibraryService _libraryService;
-        private readonly IDatabaseAccessService _databaseAccessService;
-        private readonly DatasDbContext _dbContext;
 
-        public MyApiController(ILibraryService libraryService, DatasDbContext datasDbContext, IDatabaseAccessService databaseAccessService)
+        public MyApiController(ILibraryService libraryService)
         {
             this._libraryService = libraryService;
-            this._dbContext = datasDbContext;
-            this._databaseAccessService = databaseAccessService;
         }
         [HttpGet]
         public IActionResult Get()
-        {      
-            if(_databaseAccessService.CheckTableIsNull())
-            {
-                Console.WriteLine("空的");
-                
+        {
+            var filePaths = _libraryService.GetFilePaths("Files");
+            var fileDbDatas = _libraryService.GetFileDbDatas(filePaths);
+            var viewDatas = _libraryService.GetViewDatas(fileDbDatas);
 
-                var model = GetInitInformation2();
-                return View(model);
-            }
-            else
-            {
-                Console.WriteLine("有的");
-                var model = GetInitInformation2();
-                return View(model);
-            }
+            return View(viewDatas);
         }
         //沒有使用注入服務的_library
         [HttpGet]
@@ -53,7 +40,7 @@ namespace WebApplication1.Controllers
         public List<MyApiViewModel> GetInitInformation()
         {          
             var filePaths = _libraryService.GetFilePaths("Files");
-            var fileDatas = _libraryService.GetFileDatas(filePaths);
+            var fileDatas = _libraryService.GetFileDbDatas(filePaths);
             var viewDatas = _libraryService.GetViewDatas(fileDatas);
 
             return viewDatas;
@@ -62,7 +49,7 @@ namespace WebApplication1.Controllers
         public List<MyApiViewModel> GetInitInformationByService()
         {
             var filePaths = _libraryService.GetFilePaths("Files");
-            var fileDatas = _libraryService.GetFileDatas(filePaths);
+            var fileDatas = _libraryService.GetFileDbDatas(filePaths);
             var viewDatas = _libraryService.GetViewDatas(fileDatas);
 
             return viewDatas;

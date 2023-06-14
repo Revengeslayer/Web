@@ -2,6 +2,6 @@
 {
     public interface IDataConvertService<TInput, TOutput>
     {
-        TOutput Convert(TInput input);
+        TOutput GetFileDatas(TInput input);
     }
 }

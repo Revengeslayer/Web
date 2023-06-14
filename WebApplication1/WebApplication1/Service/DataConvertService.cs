@@ -6,17 +6,18 @@ namespace WebApplication1.Service
 {
     public class DataConvertService : IDataConvertService<Datas, MyApiViewModel>
     {
-        public MyApiViewModel Convert(Datas dbData)
+        public MyApiViewModel GetFileDatas(Datas dbData)
         {
             var viewModelData = new MyApiViewModel
             {
+                Id = dbData.Id,
                 Name = dbData.Name,
                 LastWriteTime = dbData.LastWriteTime,
                 Path = dbData.Path,
                 Size = dbData.Size,
                 FileType = dbData.FileType
             };
-            Console.WriteLine(viewModelData.FileType);
+
             return viewModelData;
         }
     }

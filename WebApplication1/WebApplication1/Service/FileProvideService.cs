@@ -7,7 +7,7 @@ namespace WebApplication1.Service
     {
         private string? filePath;
 
-        public Datas Convert(FileInfo infileInformationput)
+        public Datas GetFileDatas(FileInfo infileInformationput)
         {
             var fileData = new Datas
             {

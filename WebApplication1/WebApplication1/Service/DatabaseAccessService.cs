@@ -14,5 +14,18 @@ namespace WebApplication1.Service
         {
             return _dbContext.Datas.Count() == 0;
         }
+
+        public void CreateTableDatas(List<Datas> dataLists)
+        {
+            _dbContext.Datas.AddRange(dataLists);
+            _dbContext.SaveChanges();
+        }
+
+        public List<Datas> LoadTableDatas()
+        {
+            var dataLists = _dbContext.Datas.ToList();
+
+            return dataLists;
+        }
     }
 }
