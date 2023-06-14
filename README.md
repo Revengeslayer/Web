@@ -49,8 +49,9 @@ public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
 }
 </pre>
 此段我使用了"依賴反轉"讓程式不會有太多的依賴。
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
-以下為新增功能
+
+以下為新增功能1
+---
 <pre>
 builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataConvertService>();
 builder.Services.AddTransient<IFileProvideService, FileProvideService>();
@@ -70,3 +71,19 @@ public class LibraryService : ILibraryService
     //...
 }
 </pre
+新增功能2
+---
+使用"Code First" 從現有的code專案中創立出資料庫和資料表
+使用了套件
+      Microsoft.EntityFrameworkCore.SqlServer
+      Microsoft.EntityFrameworkCore.Tools
+      Microsoft.EntityFrameworkCore
+使用了C# IDE的 套件管理主控台
+      Add-Migration InitialCreate //創建Migrations資料夾的"InitialCreate"修改的歷程記錄
+      Update-Database             //更新資料庫的狀態
+      //使用此段程式來做資料庫的設定
+      protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            ...
+        }
+      
