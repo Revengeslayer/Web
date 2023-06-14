@@ -13,9 +13,10 @@ namespace WebApplication1.Service
                 Name = dbData.Name,
                 LastWriteTime = dbData.LastWriteTime,
                 Path = dbData.Path,
-                Size = dbData.Size
+                Size = dbData.Size,
+                FileType = dbData.FileType
             };
-
+            Console.WriteLine(viewModelData.FileType);
             return viewModelData;
         }
     }

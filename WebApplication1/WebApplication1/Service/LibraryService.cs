@@ -40,7 +40,7 @@ namespace WebApplication1.Service
             var dataLists = filepaths.Select(
                 filepath =>
                 {
-                    FileInfo fileInformation = fileInformationProvider.GetFileInformation(filepath);
+                    FileInfo fileInformation = fileInformationProvider.GetFileInfo(filepath);
 
                     return fileInformationProvider.Convert(fileInformation);
                 }).ToList();

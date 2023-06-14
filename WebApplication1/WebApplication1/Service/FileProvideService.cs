@@ -9,18 +9,19 @@ namespace WebApplication1.Service
 
         public Datas Convert(FileInfo infileInformationput)
         {
-            var fileDatas = new Datas
+            var fileData = new Datas
             {
                 Name = infileInformationput.Name,
                 LastWriteTime = infileInformationput.LastWriteTime,
                 Path = this.filePath,
-                Size = infileInformationput.Length
+                Size = infileInformationput.Length,
+                FileType = infileInformationput.Extension
             };
 
-            return fileDatas;
+            return fileData;
         }
 
-        public FileInfo GetFileInformation(string filePath)
+        public FileInfo GetFileInfo(string filePath)
         {
             this.filePath = filePath;
 

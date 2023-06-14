@@ -12,7 +12,7 @@ namespace WebApplication1.Controllers
         private readonly ILibraryService _library;
         private readonly DatasDbContext _dbContext;
 
-        public MyApiController(ILibraryService library, DatasDbContext datasDbContext) 
+        public MyApiController(ILibraryService library, DatasDbContext datasDbContext)
         {
             this._library = library;
             this._dbContext = datasDbContext;
@@ -21,19 +21,30 @@ namespace WebApplication1.Controllers
         public IActionResult Get()
         {
             var model = GetInitInformation();
-            if(_library.CheckTableIsNULL(_dbContext))
+            if (_library.CheckTableIsNULL(_dbContext))
             {
                 Console.WriteLine("表示空的");
             }
 
-            return View(model); 
+            return View(model);
         }
+        //沒有使用注入服務的_library
         [HttpGet]
-        public List<MyApiViewModel> GetInitInformation()
+        public List<MyApiViewModel> GetInitInformation2()
         {
             var directoryPath = Libs.Library.FolderPath("Files");
             string[] filePaths = Directory.GetFiles(directoryPath);
-            var fileDetails= Libs.Library.GetFileDatas(filePaths);
+            var fileDetails = Libs.Library.GetFileDatas(filePaths);
+
+            return fileDetails;
+        }
+        //使用注入服務的_library
+        [HttpGet]
+        public List<MyApiViewModel> GetInitInformation()
+        {
+            var directoryPath = _library.FolderPath("Files");
+            string[] filePaths = Directory.GetFiles(directoryPath);
+            var fileDetails = _library.GetFileDatas(filePaths);
 
             return fileDetails;
         }
@@ -42,7 +53,7 @@ namespace WebApplication1.Controllers
         {
             var directoryPath = _library.FolderPath("Files");
             string[] filePaths = Directory.GetFiles(directoryPath);
-            var fileDetails =_library.GetFileDatas(filePaths);
+            var fileDetails = _library.GetFileDatas(filePaths);
 
             return fileDetails;
         }
@@ -52,6 +63,16 @@ namespace WebApplication1.Controllers
             var sortedList = _library.GetSortDatas(viewModelData, sortOption);
 
             return sortedList;
+        }
+        [HttpGet]
+        public string Edit()
+        {
+            return "EDIT";
+        }
+        [HttpGet]
+        public string Delete()
+        {
+            return "Delete";
         }
     }
 }

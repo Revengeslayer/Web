@@ -17,7 +17,8 @@ namespace WebApplication1.Libs
                 Name = dbData.Name,
                 LastWriteTime = dbData.LastWriteTime,
                 Path = dbData.Path,
-                Size = dbData.Size
+                Size = dbData.Size,
+                FileType = dbData.FileType
             };
 
             return viewModelData;
@@ -37,7 +38,8 @@ namespace WebApplication1.Libs
                 Name = infileInformationput.Name,
                 LastWriteTime = infileInformationput.LastWriteTime,
                 Path = this.filePath,
-                Size = infileInformationput.Length
+                Size = infileInformationput.Length,
+                FileType=infileInformationput.Extension
             };
 
             return fileDatas;

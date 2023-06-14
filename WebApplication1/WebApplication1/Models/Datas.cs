@@ -2,7 +2,7 @@
 
 namespace WebApplication1.Models
 {
-    public class Datas
+    public partial class Datas
     {
         [Key]
         public int Id { get; set; }

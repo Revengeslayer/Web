@@ -36,6 +36,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Size)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FileType)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,6 +57,13 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FileType)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit") |
+                    @Html.ActionLink("Delete", "Delete")
                 </td>
             </tr>
         }
@@ -83,19 +93,23 @@
                     tableBody.empty();
                     response.forEach(function (item) {
                         var row = $("<tr></tr>");
-                        var nameCell = $("<td></td>").text(item.name);                                           
+                        var nameCell = $("<td></td>").text(item.name);
                         var lastWriteTimeCell = $("<td></td>").text(ShowTime(item.lastWriteTime));
                         var pathCell = $("<td></td>").text(item.path);
                         var sizeCell = $("<td></td>").text(item.size);
+                        var filetypeCell = $("<td></td>").text(item.fileType);
+                        var endCell = $("<td></td>").append('@Html.ActionLink("Edit", "Edit")' + ' | ' + '@Html.ActionLink("Delete", "Delete")');
 
                         row.append(nameCell);
                         row.append(lastWriteTimeCell);
                         row.append(pathCell);
                         row.append(sizeCell);
+                        row.append(filetypeCell);
+                        row.append(endCell);
 
                         tableBody.append(row);
 
-                        function ShowTime(time){
+                        function ShowTime(time) {
                             var recordDateTime = new Date(time);
 
                             var year = recordDateTime.getFullYear();
