@@ -11,6 +11,7 @@ builder.Services.AddDbContext<DatasDbContext>(options =>options.UseSqlServer(bui
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddTransient<IDatabaseAccessService, DatabaseAccessService>();
 builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataConvertService>();
 builder.Services.AddTransient<IFileProvideService, FileProvideService>();
 builder.Services.AddTransient<ILibraryService, LibraryService>();

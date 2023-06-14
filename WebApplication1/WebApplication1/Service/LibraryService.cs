@@ -20,32 +20,24 @@ namespace WebApplication1.Service
             string folderPath = Path.Combine(currentPath, filename);
             return folderPath;
         }
-        public List<MyApiViewModel> GetFileDatas(string[] filepaths)
+        public List<Datas> GetFileDatas(string[] filepaths)
         {
             //Database Datas load
-            var dbDataLists = GetDBDataLists(filepaths, fileProvideService);
-            //ViewData load
-            var viewDataLists = GetViewDataLists(dbDataLists, dataConvertService);
-
-            return viewDataLists;
-        }
-        private static List<MyApiViewModel> GetViewDataLists(List<Datas> dbDataLists, IDataConvertService<Datas, MyApiViewModel> dataConverter)
-        {
-            var viesDataLists = dbDataLists.Select(dbData => dataConverter.Convert(dbData)).ToList();
-
-            return viesDataLists;
-        }
-        private static List<Datas> GetDBDataLists(string[] filepaths, IFileProvideService fileInformationProvider)
-        {
             var dataLists = filepaths.Select(
                 filepath =>
                 {
-                    FileInfo fileInformation = fileInformationProvider.GetFileInfo(filepath);
+                    FileInfo fileInformation = fileProvideService.GetFileInfo(filepath);
 
-                    return fileInformationProvider.Convert(fileInformation);
+                    return fileProvideService.Convert(fileInformation);
                 }).ToList();
 
             return dataLists;
+        }
+        public List<MyApiViewModel> GetViewDatas(List<Datas> dbDataLists)
+        {
+            var viesDataLists = dbDataLists.Select(dbData => dataConvertService.Convert(dbData)).ToList();
+
+            return viesDataLists;
         }
         public List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
         {
@@ -70,9 +62,12 @@ namespace WebApplication1.Service
             return model;
         }
 
-        public bool CheckTableIsNULL(DatasDbContext _dbContext)
+        public string[] GetFilePaths(string filename)
         {
-            return _dbContext.Datas.Count() == 0;
+            var directoryPath = FolderPath(filename);
+            string[] filePaths = Directory.GetFiles(directoryPath);
+
+            return filePaths;
         }
     }
 }

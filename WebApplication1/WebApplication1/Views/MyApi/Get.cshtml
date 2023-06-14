@@ -62,8 +62,18 @@
                     @Html.DisplayFor(modelItem => item.FileType)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit") |
-                    @Html.ActionLink("Delete", "Delete")
+                    @{
+                        if(item.FileType==".txt")
+                        {
+                            @Html.ActionLink("Edit", "Edit")
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Delete", "Delete")                
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Delete", "Delete")
+                        }
+                    }                  
                 </td>
             </tr>
         }
@@ -98,7 +108,7 @@
                         var pathCell = $("<td></td>").text(item.path);
                         var sizeCell = $("<td></td>").text(item.size);
                         var filetypeCell = $("<td></td>").text(item.fileType);
-                        var endCell = $("<td></td>").append('@Html.ActionLink("Edit", "Edit")' + ' | ' + '@Html.ActionLink("Delete", "Delete")');
+                        var endCell = $("<td></td>").append(ShowEndCell(item.fileType));
 
                         row.append(nameCell);
                         row.append(lastWriteTimeCell);
@@ -128,6 +138,14 @@
 
                             var formattedDateTime = year + '/' + month + '/' + day + ' ' + amOrPm + ' ' + hours + ':' + minutes + ':' + seconds;
                             return formattedDateTime;
+                        }
+
+                        function ShowEndCell(fileType)
+                        {
+                            if (fileType==='.txt')
+                                return '@Html.ActionLink("Edit", "Edit")' + ' | ' + '@Html.ActionLink("Delete", "Delete")'
+                            else
+                                return '@Html.ActionLink("Delete", "Delete")'
                         }
                     });
                 },
