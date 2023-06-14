@@ -62,12 +62,12 @@ namespace WebApplication1.Controllers
             return sortedList;
         }
         [HttpGet]
-        public string Edit()
+        public string UpdateData()
         {
             return "EDIT";
         }
         [HttpGet]
-        public string Delete()
+        public string DeleteData()
         {
             return "Delete";
         }

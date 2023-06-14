@@ -65,13 +65,13 @@
                     @{
                         if(item.FileType==".txt")
                         {
-                            @Html.ActionLink("Edit", "Edit")
+                            @Html.ActionLink("Edit", "UpdateData")
                             @Html.Raw(" | ")
-                            @Html.ActionLink("Delete", "Delete")                
+                            @Html.ActionLink("Delete", "DeleteData")
                         }
                         else
                         {
-                            @Html.ActionLink("Delete", "Delete")
+                            @Html.ActionLink("Delete", "DeleteData")
                         }
                     }                  
                 </td>
@@ -103,21 +103,14 @@
                     var tableBody = $(".table tbody");
                     tableBody.empty();
                     response.forEach(function (item) {
-                        var row = $("<tr></tr>");
-                        var nameCell = $("<td></td>").text(item.name);
-                        var lastWriteTimeCell = $("<td></td>").text(ShowTime(item.lastWriteTime));
-                        var pathCell = $("<td></td>").text(item.path);
-                        var sizeCell = $("<td></td>").text(item.size);
-                        var filetypeCell = $("<td></td>").text(item.fileType);
-                        var endCell = $("<td></td>").append(ShowEndCell(item.fileType));
-
-                        row.append(nameCell);
-                        row.append(lastWriteTimeCell);
-                        row.append(pathCell);
-                        row.append(sizeCell);
-                        row.append(filetypeCell);
-                        row.append(endCell);
-
+                        var row = $("<tr>").append(
+                            $("<td>").text(item.name),
+                            $("<td>").text(ShowTime(item.lastWriteTime)),
+                            $("<td>").text(item.path),
+                            $("<td>").text(item.size),
+                            $("<td>").text(item.fileType),
+                            $("<td>").append(ShowEndCell(item.fileType))
+                        )
                         tableBody.append(row);
 
                         function ShowTime(time) {
@@ -143,10 +136,23 @@
 
                         function ShowEndCell(fileType)
                         {
-                            if (fileType==='.txt')
-                                return '@Html.ActionLink("Edit", "Edit")' + ' | ' + '@Html.ActionLink("Delete", "Delete")'
-                            else
-                                return '@Html.ActionLink("Delete", "Delete")'
+                            if (fileType === '.txt') {
+                                var editLink = `<a href="/MyApi/UpdateData">Edit</a>`;
+                                var deleteLink = `<a href="/MyApi/DeleteData">Delete</a>`;
+                                var separator = ' | ';
+
+                                var endCell = document.createElement('td');
+                                endCell.innerHTML = `${editLink} ${separator} ${deleteLink}`;
+
+                                return endCell;
+                            } else {
+                                var deleteLink = `<a href="/MyApi/DeleteData">Delete</a>`;
+
+                                var endCell = document.createElement('td');
+                                endCell.innerHTML = `${deleteLink}`;
+
+                                return endCell;
+                            }
                         }
                     });
                 },
