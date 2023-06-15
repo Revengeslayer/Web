@@ -7,6 +7,7 @@ namespace WebApplication1.Service
 {
     public class LibraryService : ILibraryService
     {
+        private static int txtNumber = 0;
         private readonly IFileProvideService fileProvideService;
         private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
         private readonly IDatabaseAccessService databaseAccessService;
@@ -21,6 +22,7 @@ namespace WebApplication1.Service
         {
             string currentPath = Directory.GetCurrentDirectory();
             string folderPath = Path.Combine(currentPath, filename);
+
             return folderPath;
         }
         public List<Datas> GetFileDbDatas(string[] filepaths)
@@ -37,7 +39,7 @@ namespace WebApplication1.Service
                     return fileProvideService.GetFileDatas(fileInformation);
                 }).ToList();
 
-                databaseAccessService.CreateTableDatas(dataLists);
+                databaseAccessService.CreateDatasTable(dataLists);
 
                 return dataLists;
             }
@@ -82,6 +84,11 @@ namespace WebApplication1.Service
             string[] filePaths = Directory.GetFiles(directoryPath);
 
             return filePaths;
+        }
+        public void CreateNewTxt()
+        {
+            databaseAccessService.CreateNewTxtToDatabase(txtNumber);
+            txtNumber++;
         }
     }
 }

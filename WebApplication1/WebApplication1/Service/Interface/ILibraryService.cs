@@ -5,10 +5,11 @@ namespace WebApplication1.Service.Interface
 {
     public interface ILibraryService
     {
-        public string FolderPath(string filename);
-        public List<Datas> GetFileDbDatas(string[] filepaths);
-        public List<MyApiViewModel> GetViewDatas(List<Datas> datas);
-        public List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption);
+        string FolderPath(string filename);
+        List<Datas> GetFileDbDatas(string[] filepaths);
+        List<MyApiViewModel> GetViewDatas(List<Datas> datas);
+        List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption);
         string[] GetFilePaths(string filename);
+        void CreateNewTxt();
     }
 }

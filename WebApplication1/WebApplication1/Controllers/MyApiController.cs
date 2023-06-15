@@ -55,6 +55,14 @@ namespace WebApplication1.Controllers
             return viewDatas;
         }
         [HttpPost]
+        public List<MyApiViewModel> Creat()
+        {
+            _libraryService.CreateNewTxt();
+            var viewData = Get();
+
+            return new List<MyApiViewModel>();
+        }
+        [HttpPost]
         public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
         {
             var sortedList = _libraryService.GetSortDatas(viewModelData, sortOption);

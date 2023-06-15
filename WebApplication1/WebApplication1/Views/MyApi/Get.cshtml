@@ -3,10 +3,7 @@
 @{
     ViewData["Title"] = "Get";
 }
-
-
 <h1>Get</h1>
-
 <label for="sort">排序：</label>
 <select id="sort">
     <option value="name1">依名稱(升序)</option>
@@ -21,8 +18,10 @@
 
 <button id="btnSubmit">提交</button>
 
+<p><button id="createLink">Create</button></p>
+
 <table class="table">
-    <thead>
+    <thead>     
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -115,22 +114,22 @@
 
                         function ShowTime(time) {
                             var recordDateTime = new Date(time);
+                            var formattedDateTime = recordDateTime.toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: 'numeric',
+                                second: 'numeric',
+                                hour12: true
+                            });
 
-                            var year = recordDateTime.getFullYear();
-                            var month = recordDateTime.getMonth() + 1;
-                            var day = recordDateTime.getDate();
-                            var hours = recordDateTime.getHours();
-                            var minutes = recordDateTime.getMinutes();
-                            var seconds = recordDateTime.getSeconds();
+                            var regex = /(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (AM|PM)/;
+                            var [, month, day, year, hours, minutes, seconds, amOrPm] = formattedDateTime.match(regex);
 
-                            var amOrPm = hours >= 12 ? '下午' : '上午';
-                            hours = hours % 12;
-                            hours = hours ? hours : 12;
-                            hours = hours.toString().padStart(2, '0');
-                            minutes = minutes.toString().padStart(2, '0');
-                            seconds = seconds.toString().padStart(2, '0');
+                            amOrPm = amOrPm === 'AM' ? '上午' : '下午';
+                            var formattedDateTime = `${year}/${month}/${day} ${amOrPm} ${hours}:${minutes}:${seconds}`;                      
 
-                            var formattedDateTime = year + '/' + month + '/' + day + ' ' + amOrPm + ' ' + hours + ':' + minutes + ':' + seconds;
                             return formattedDateTime;
                         }
 
@@ -155,6 +154,20 @@
                             }
                         }
                     });
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+        $('#createLink').click(function (e) {
+            e.preventDefault(); 
+            $.ajax({
+                url: '/MyApi/Creat',
+                type: 'POST',
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     console.log(error);

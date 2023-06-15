@@ -5,7 +5,8 @@ namespace WebApplication1.Service.Interface
     public interface IDatabaseAccessService
     {
         bool CheckTableIsNull();
-        void CreateTableDatas(List<Datas> dataLists);
+        void CreateDatasTable(List<Datas> dataLists);
         List<Datas> LoadTableDatas();
+        void CreateNewTxtToDatabase(int txtnumber);
     }
 }
