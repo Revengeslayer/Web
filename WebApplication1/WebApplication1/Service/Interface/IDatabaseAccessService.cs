@@ -8,7 +8,7 @@ namespace WebApplication1.Service.Interface
         void CreateDatasTable(List<Datas> dataLists);
         List<Datas> LoadTableDatas();
         void CreateNewTxtToDatabase(int txtnumber);
-        Datas FindViewDataIdDbData(int viewDataId);
+        Datas? FindViewDataIdDbData(int viewDataId);
         void DeteletData(Datas viewDataIdData);
     }
 }

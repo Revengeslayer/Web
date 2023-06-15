@@ -69,10 +69,10 @@ namespace WebApplication1.Controllers
 
             return sortedList;
         }
-        [HttpGet]
-        public string UpdateData()
+        [HttpPut]
+        public IActionResult UpdateData(int viewDataId)
         {
-            return "EDIT";
+            return Ok(viewDataId);
         }
         [HttpDelete]
         public IActionResult DeleteData(int viewDataId)

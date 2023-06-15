@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Get";
 }
+<style>
+    .editButton,
+    .deleteButton {
+        display: inline-block;
+        margin-right: 5px;
+    }
+</style>
 <h1>Get</h1>
 <label for="sort">排序：</label>
 <select id="sort">
@@ -64,8 +71,7 @@
                     @{
                         if (item.FileType == ".txt")
                         {
-                            @Html.ActionLink("Edit", "UpdateData")
-                            @Html.Raw(" | ")
+                            <button class="editButton" data-id="@item.Id">Edit</button>
                             <button class="deleteButton" data-id="@item.Id">Delete</button>
                         }
                         else
@@ -135,19 +141,19 @@
 
                         function ShowEndCell(fileType) {
                             if (fileType === '.txt') {
-                                var editLink = `<a href="/MyApi/UpdateData">Edit</a>`;
-                                var deleteLink = `<a href="/MyApi/DeleteData">Delete</a>`;
+                                var editButton = `<button class="editButton2" data-id="${item.id}">Edit</button>`;
+                                var deleteButton = `<button class="deleteButton2" data-id="${item.id}">Delete</button>`;
                                 var separator = ' | ';
-
                                 var endCell = document.createElement('td');
-                                endCell.innerHTML = `${editLink} ${separator} ${deleteLink}`;
+
+                                endCell.innerHTML = `${editButton} ${separator} ${deleteButton}`;
 
                                 return endCell;
                             } else {
-                                var deleteLink = `<a href="/MyApi/DeleteData">Delete</a>`;
-
+                                var deleteButton = `<button class="deleteButton2" data-id="${item.id}">Delete</button>`;
                                 var endCell = document.createElement('td');
-                                endCell.innerHTML = `${deleteLink}`;
+
+                                endCell.innerHTML = `${deleteButton}`;
 
                                 return endCell;
                             }
@@ -175,7 +181,6 @@
         });
         $('.deleteButton').click(function (e) {
             var viewDataId = $(this).data('id');
-            console.log(viewDataId);
             $.ajax({
                 url: '/MyApi/DeleteData/?viewDataId=' + viewDataId,
                 type: 'DELETE',
@@ -187,6 +192,50 @@
                     console.log(error);
                 }
             });
+        });
+        $('.editButton').click(function (e) {
+            var viewDataId = $(this).data('id');
+            console.log(viewDataId);
+            $.ajax({
+                url: '/MyApi/UpdateData/?viewDataId=' + viewDataId,
+                type: 'PUT',
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    $(document).on('click', '.editButton2', function (e) {
+        var viewDataId = $(this).data('id');
+        $.ajax({
+            url: '/MyApi/UpdateData/?viewDataId=' + viewDataId,
+            type: 'PUT',
+            success: function (response) {
+                console.log(response);
+                debugger;
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+    $(document).on('click', '.deleteButton2', function (e) {
+        var viewDataId = $(this).data('id');
+        $.ajax({
+            url: '/MyApi/DeleteData/?viewDataId=' + viewDataId,
+            type: 'DELETE',
+            success: function (response) {
+                console.log(response);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
         });
     });
 </script>

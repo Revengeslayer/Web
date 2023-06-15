@@ -49,7 +49,7 @@ namespace WebApplication1.Service
             _dbContext.SaveChanges();
         }
 
-        public Datas FindViewDataIdDbData(int viewDataId)
+        public Datas? FindViewDataIdDbData(int viewDataId)
         {
             return _dbContext.Datas.Find(viewDataId);
         }
