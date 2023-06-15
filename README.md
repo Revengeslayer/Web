@@ -57,16 +57,18 @@ builder.Services.AddTransient<IDataConvertService<Datas,MyApiViewModel>, DataCon
 builder.Services.AddTransient<IFileProvideService, FileProvideService>();
 builder.Services.AddTransient<ILibraryService, LibraryService>();
 </pre>
-我在Program中新增3個service 並在 LibraryService 中使用"注入" 來獲取這些服務
+我在Program中新增多個service 並在 LibraryService 中使用"注入" 來獲取這些服務
 <pre>
 public class LibraryService : ILibraryService
 {
     private readonly IFileProvideService fileProvideService;
     private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
-    public LibraryService(IFileProvideService fileProvideService,IDataConvertService<Datas,MyApiViewModel> dataConvertService) 
+    public LibraryService(IFileProvideService fileProvideService,IDataConvertService<Datas,MyApiViewModel>   
+                            dataConvertService,IDatabaseAccessService databaseAccessService) 
     {
         this.fileProvideService = fileProvideService;
         this.dataConvertService = dataConvertService;
+        this._databaseAccessService = databaseAccessService;    
     }
     //...
 }
@@ -90,5 +92,18 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         ...
 }
 </pre>
-
-      
+新增功能3
+---
+新稱Create Delete Txt 功能，可以create Txt寫入 Database 和 刪除 DataBase
+<pre>
+public void CreateNewTxt()
+{
+      _databaseAccessService.CreateNewTxtToDatabase(txtNumber);
+      txtNumber++;
+}
+public void DeleteTxt(int viewDataId)
+{
+      var viewDataIdData = _databaseAccessService.FindViewDataIdDbData(viewDataId);
+      _databaseAccessService.DeteletData(viewDataIdData);
+}
+</pre>
