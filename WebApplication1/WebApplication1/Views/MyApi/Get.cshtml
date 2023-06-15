@@ -105,8 +105,10 @@
                 data: viewData,
                 success: function (response) {
                     console.log(response);
+
                     var tableBody = $(".table tbody");
                     tableBody.empty();
+
                     response.forEach(function (item) {
                         var row = $("<tr>").append(
                             $("<td>").text(item.name),
@@ -141,8 +143,8 @@
 
                         function ShowEndCell(fileType) {
                             if (fileType === '.txt') {
-                                var editButton = `<button class="editButton2" data-id="${item.id}">Edit</button>`;
-                                var deleteButton = `<button class="deleteButton2" data-id="${item.id}">Delete</button>`;
+                                var editButton = `<button class="editButton" data-id="${item.id}">Edit</button>`;
+                                var deleteButton = `<button class="deleteButton" data-id="${item.id}">Delete</button>`;
                                 var separator = ' | ';
                                 var endCell = document.createElement('td');
 
@@ -150,7 +152,7 @@
 
                                 return endCell;
                             } else {
-                                var deleteButton = `<button class="deleteButton2" data-id="${item.id}">Delete</button>`;
+                                var deleteButton = `<button class="deleteButton" data-id="${item.id}">Delete</button>`;
                                 var endCell = document.createElement('td');
 
                                 endCell.innerHTML = `${deleteButton}`;
@@ -165,6 +167,7 @@
                 }
             });
         });
+        //createLink則是一開始就存在HTML內
         $('#createLink').click(function (e) {
             e.preventDefault();
             $.ajax({
@@ -178,45 +181,17 @@
                     console.log(error);
                 }
             });
-        });
-        $('.deleteButton').click(function (e) {
-            var viewDataId = $(this).data('id');
-            $.ajax({
-                url: '/MyApi/DeleteData/?viewDataId=' + viewDataId,
-                type: 'DELETE',
-                success: function (response) {
-                    console.log(response);
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
-        });
-        $('.editButton').click(function (e) {
-            var viewDataId = $(this).data('id');
-            console.log(viewDataId);
-            $.ajax({
-                url: '/MyApi/UpdateData/?viewDataId=' + viewDataId,
-                type: 'PUT',
-                success: function (response) {
-                    console.log(response);
-                    location.reload();
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
-        });
+        });      
     });
-    $(document).on('click', '.editButton2', function (e) {
+    //因ShowEndCell是動態產生的HTML則要在這觸發 
+    $(document).on('click','.editButton', function (e) {
         var viewDataId = $(this).data('id');
+
         $.ajax({
             url: '/MyApi/UpdateData/?viewDataId=' + viewDataId,
             type: 'PUT',
             success: function (response) {
                 console.log(response);
-                debugger;
                 location.reload();
             },
             error: function (xhr, status, error) {
@@ -224,8 +199,9 @@
             }
         });
     });
-    $(document).on('click', '.deleteButton2', function (e) {
+    $(document).on('click', '.deleteButton', function (e) {
         var viewDataId = $(this).data('id');
+
         $.ajax({
             url: '/MyApi/DeleteData/?viewDataId=' + viewDataId,
             type: 'DELETE',
