@@ -1,6 +1,7 @@
 ﻿using WebApplication1.Models;
 using WebApplication1.Service.Interface;
 using System.IO;
+using System.Linq;
 
 namespace WebApplication1.Service
 {
@@ -40,6 +41,17 @@ namespace WebApplication1.Service
             var filedata = _fileProvideService.GetFileDatas(fileInformation);
             _dbContext.Datas.Add(filedata);
             _dbContext.SaveChanges();
+        }
+
+        public void DeteletData(Datas viewDataIdData)
+        {
+            _dbContext.Remove(viewDataIdData);
+            _dbContext.SaveChanges();
+        }
+
+        public Datas FindViewDataIdDbData(int viewDataId)
+        {
+            return _dbContext.Datas.Find(viewDataId);
         }
 
         public List<Datas> LoadTableDatas()

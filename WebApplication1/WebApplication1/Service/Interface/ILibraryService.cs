@@ -11,5 +11,6 @@ namespace WebApplication1.Service.Interface
         List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption);
         string[] GetFilePaths(string filename);
         void CreateNewTxt();
+        void DeleteTxt(int viewDataId);
     }
 }

@@ -8,15 +8,15 @@ namespace WebApplication1.Service
     public class LibraryService : ILibraryService
     {
         private static int txtNumber = 0;
-        private readonly IFileProvideService fileProvideService;
-        private readonly IDataConvertService<Datas, MyApiViewModel> dataConvertService;
-        private readonly IDatabaseAccessService databaseAccessService;
+        private readonly IFileProvideService _fileProvideService;
+        private readonly IDataConvertService<Datas, MyApiViewModel> _dataConvertService;
+        private readonly IDatabaseAccessService _databaseAccessService;
 
         public LibraryService(IFileProvideService fileProvideService, IDataConvertService<Datas, MyApiViewModel> dataConvertService,IDatabaseAccessService databaseAccessService)
         {
-            this.fileProvideService = fileProvideService;
-            this.dataConvertService = dataConvertService;
-            this.databaseAccessService = databaseAccessService;
+            this._fileProvideService = fileProvideService;
+            this._dataConvertService = dataConvertService;
+            this._databaseAccessService = databaseAccessService;
         }
         public string FolderPath(string filename)
         {
@@ -28,32 +28,32 @@ namespace WebApplication1.Service
         public List<Datas> GetFileDbDatas(string[] filepaths)
         {
             //Database Datas load
-            if (databaseAccessService.CheckTableIsNull())
+            if (_databaseAccessService.CheckTableIsNull())
             {
                 Console.WriteLine("空的");
                 var dataLists = filepaths.Select(
                 filepath =>
                 {
-                    FileInfo fileInformation = fileProvideService.GetFileInfo(filepath);
+                    FileInfo fileInformation = _fileProvideService.GetFileInfo(filepath);
 
-                    return fileProvideService.GetFileDatas(fileInformation);
+                    return _fileProvideService.GetFileDatas(fileInformation);
                 }).ToList();
 
-                databaseAccessService.CreateDatasTable(dataLists);
+                _databaseAccessService.CreateDatasTable(dataLists);
 
                 return dataLists;
             }
             else
             {
                 Console.WriteLine("有的");
-                var dataLists = databaseAccessService.LoadTableDatas();
+                var dataLists = _databaseAccessService.LoadTableDatas();
 
                 return dataLists;
             }        
         }
         public List<MyApiViewModel> GetViewDatas(List<Datas> dbDataLists)
         {
-            var viesDataLists = dbDataLists.Select(dbData => dataConvertService.GetFileDatas(dbData)).ToList();
+            var viesDataLists = dbDataLists.Select(dbData => _dataConvertService.GetFileDatas(dbData)).ToList();
 
             return viesDataLists;
         }
@@ -87,8 +87,13 @@ namespace WebApplication1.Service
         }
         public void CreateNewTxt()
         {
-            databaseAccessService.CreateNewTxtToDatabase(txtNumber);
+            _databaseAccessService.CreateNewTxtToDatabase(txtNumber);
             txtNumber++;
+        }
+        public void DeleteTxt(int viewDataId)
+        {
+            var viewDataIdData = _databaseAccessService.FindViewDataIdDbData(viewDataId);
+            _databaseAccessService.DeteletData(viewDataIdData);
         }
     }
 }

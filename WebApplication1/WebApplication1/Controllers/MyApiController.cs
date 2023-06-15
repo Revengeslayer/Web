@@ -55,12 +55,12 @@ namespace WebApplication1.Controllers
             return viewDatas;
         }
         [HttpPost]
-        public List<MyApiViewModel> Creat()
+        public IActionResult Creat()
         {
             _libraryService.CreateNewTxt();
-            var viewData = Get();
+            var viewData = GetInitInformationByService();
 
-            return new List<MyApiViewModel>();
+            return Ok(viewData);
         }
         [HttpPost]
         public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelData, string sortOption)
@@ -74,10 +74,14 @@ namespace WebApplication1.Controllers
         {
             return "EDIT";
         }
-        [HttpGet]
-        public string DeleteData()
+        [HttpDelete]
+        public IActionResult DeleteData(int viewDataId)
         {
-            return "Delete";
+            Console.WriteLine("進入刪除controller");
+            Console.WriteLine(viewDataId);
+            _libraryService.DeleteTxt(viewDataId);
+
+            return Ok(viewDataId);
         }
     }
 }

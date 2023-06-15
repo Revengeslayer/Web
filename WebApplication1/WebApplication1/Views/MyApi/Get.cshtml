@@ -21,7 +21,7 @@
 <p><button id="createLink">Create</button></p>
 
 <table class="table">
-    <thead>     
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -62,17 +62,17 @@
                 </td>
                 <td>
                     @{
-                        if(item.FileType==".txt")
+                        if (item.FileType == ".txt")
                         {
                             @Html.ActionLink("Edit", "UpdateData")
                             @Html.Raw(" | ")
-                            @Html.ActionLink("Delete", "DeleteData")
+                            <button class="deleteButton" data-id="@item.Id">Delete</button>
                         }
                         else
                         {
-                            @Html.ActionLink("Delete", "DeleteData")
+                            <button class="deleteButton" data-id="@item.Id">Delete</button>
                         }
-                    }                  
+                    }
                 </td>
             </tr>
         }
@@ -128,13 +128,12 @@
                             var [, month, day, year, hours, minutes, seconds, amOrPm] = formattedDateTime.match(regex);
 
                             amOrPm = amOrPm === 'AM' ? '上午' : '下午';
-                            var formattedDateTime = `${year}/${month}/${day} ${amOrPm} ${hours}:${minutes}:${seconds}`;                      
+                            var formattedDateTime = `${year}/${month}/${day} ${amOrPm} ${hours}:${minutes}:${seconds}`;
 
                             return formattedDateTime;
                         }
 
-                        function ShowEndCell(fileType)
-                        {
+                        function ShowEndCell(fileType) {
                             if (fileType === '.txt') {
                                 var editLink = `<a href="/MyApi/UpdateData">Edit</a>`;
                                 var deleteLink = `<a href="/MyApi/DeleteData">Delete</a>`;
@@ -161,10 +160,25 @@
             });
         });
         $('#createLink').click(function (e) {
-            e.preventDefault(); 
+            e.preventDefault();
             $.ajax({
                 url: '/MyApi/Creat',
                 type: 'POST',
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+        $('.deleteButton').click(function (e) {
+            var viewDataId = $(this).data('id');
+            console.log(viewDataId);
+            $.ajax({
+                url: '/MyApi/DeleteData/?viewDataId=' + viewDataId,
+                type: 'DELETE',
                 success: function (response) {
                     console.log(response);
                     location.reload();
