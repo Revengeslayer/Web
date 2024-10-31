@@ -16,6 +16,13 @@ namespace WebApplication1.Service
             this._fileProvideService = fileProvideService;
             this._txtService = txtService;
         }
+
+        public void AddData(Datas Data)
+        {
+            _dbContext.Datas.Add(Data);
+            _dbContext.SaveChanges();
+        }
+
         public bool CheckTableIsNull()
         {
             return _dbContext.Datas.Count() == 0;

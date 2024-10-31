@@ -81,6 +81,7 @@ namespace WebApplication1.Controllers
             Console.WriteLine(viewDataId);
             _libraryService.DeleteTxt(viewDataId);
 
+
             return Ok(viewDataId);
         }
     }

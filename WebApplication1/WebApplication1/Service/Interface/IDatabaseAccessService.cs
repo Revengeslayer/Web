@@ -10,5 +10,6 @@ namespace WebApplication1.Service.Interface
         void CreateNewTxtToDatabase(int txtnumber);
         Datas? FindViewDataIdDbData(int viewDataId);
         void DeteletData(Datas viewDataIdData);
+        void AddData(Datas Data);
     }
 }

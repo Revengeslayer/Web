@@ -1,4 +1,5 @@
-﻿using WebApplication1.Libs;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApplication1.Libs;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
 using WebApplication1.Service.Interface;
@@ -47,6 +48,7 @@ namespace WebApplication1.Service
             {
                 Console.WriteLine("有的");
                 var dataLists = _databaseAccessService.LoadTableDatas();
+                CheckFileNumbers(filepaths,dataLists);
 
                 return dataLists;
             }        
@@ -54,7 +56,6 @@ namespace WebApplication1.Service
         public List<MyApiViewModel> GetViewDatas(List<Datas> dbDataLists)
         {
             var viesDataLists = dbDataLists.Select(dbData => _dataConvertService.GetFileDatas(dbData)).ToList();
-
             return viesDataLists;
         }
         public List<MyApiViewModel> GetSortDatas(List<MyApiViewModel> model, string sortOption)
@@ -93,7 +94,39 @@ namespace WebApplication1.Service
         public void DeleteTxt(int viewDataId)
         {
             var viewDataIdData = _databaseAccessService.FindViewDataIdDbData(viewDataId);
+            File.Delete(viewDataIdData.Path);
             _databaseAccessService.DeteletData(viewDataIdData);
+        }
+
+        public List<Datas> CheckFileNumbers(string[] filepaths,List<Datas> datas)
+        {
+            if(filepaths.Length>datas.Count)
+            {
+                foreach(var filepath in filepaths)
+                {
+                    if(!datas.Exists(d => d.Path == filepath))
+                    {
+                        FileInfo fileInformation = _fileProvideService.GetFileInfo(filepath);
+                        var filedata = _fileProvideService.GetFileDatas(fileInformation);
+                        _databaseAccessService.AddData(filedata);
+                    }
+                }
+
+                return datas;
+            }
+            else if (filepaths.Length < datas.Count)
+            {
+                foreach (var data in datas)
+                {
+                    if(!filepaths.Contains(data.Path))
+                    {
+                        _databaseAccessService.DeteletData(data);
+                    }
+                }
+
+                return datas;
+            }
+            else return datas;
         }
     }
 }
