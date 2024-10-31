@@ -36,7 +36,7 @@ public List<MyApiViewModel> GetOrderBySelection(List<MyApiViewModel> viewModelDa
 
 其中的"Libs"是我存放我自己的函式庫的地方
 
-[Libs](./Libs)
+[Libs](./Libs/Library.cs)
 
 <pre>
 public static List<MyApiViewModel> GetFileDatas(string[] filepaths)
